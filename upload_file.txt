@@ -1,0 +1,29 @@
+- Ý tưởng upload_file:
+
+B1: Tạo thư mục static ngang với app và upload_file.
+B2: Vào upload_file/settings.py thêm:
+STATICFILES_DIRS = [
+	os.path.join(BASE_DIR, 'static')
+]
+B3: Tạo file static/test.txt => 127.0.0.1:8000/static/test.txt
+
+----------------------------------
+
+-----app/templates/index.html-------
+<form method="POST" enctype="multipart/form-data">  # thuộc tính enctype để gửi lên server
+    {%csrf_token%}
+    <input type="file" name="img">
+    <input type="submit">
+</form>
+
+-----app/views.py-------
+from django.shortcuts import render, redirect
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage()  # khởi tạo đối tượng
+def index(request):
+    if request.method == 'POST':
+        file = request.FILES.get('img')
+        if file and file.name != '':
+            saved_path = fs.save('static/'+file.name, file)
+            return redirect('/' + saved_path)          
+    return render(request, 'index.html')

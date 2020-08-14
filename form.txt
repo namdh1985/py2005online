@@ -1,0 +1,24 @@
+- Ý tưởng: Nhập dữ liệu từ trang chủ => hiển thị ra thông tin mới nhập vào
+
+------app/views.py----------
+def index(request):
+    if request.method == 'POST':
+        code = request.POST['code']
+        name = request.POST['name']
+        price = request.POST['price']
+        return render(request, 'saved.html', {'code':code,'name':name,'price':price})
+    return render(request, 'index.html')
+	
+------app/templates/index.html--------
+<form method="POST">
+    {%csrf_token%}
+    <p>Mã: <input name='code'></p>
+    <p>Tên: <input name='name'></p>
+    <p>Giá: <input name='price'></p>
+    <button type="submit">Save</button>
+</form>
+
+------app/templates/saved.html----------
+<p>Mã: {{code}}</p>
+<p>Tên: {{name}}</p>
+<p>Giá: {{price}}</p>

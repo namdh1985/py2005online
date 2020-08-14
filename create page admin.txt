@@ -1,0 +1,36 @@
+B1: Trong file app/models.py
+- Tạo class Category and Product:
+
+class Category(models.Model):
+    code = models.CharField(max_length=30, verbose_name='Mã',  unique=True)
+    name = models.CharField(max_length=200, verbose_name='Tên')
+    def __str__(self):
+        return self.name
+
+class Product(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Nhóm sản phẩm')
+    code = models.CharField(max_length=30, unique=True, verbose_name='Mã')
+    name = models.CharField(max_length=200, verbose_name='Tên')
+    price = models.FloatField(verbose_name='Đơn giá')
+    image = models.ImageField(upload_to='static/images', verbose_name='Ảnh mẫu')
+    def __str__(self):
+        return self.name
+		
+B2: Trong file app/admin.py
+- Đăng ký Category and Product:
+
+from .models import *
+admin.site.register(Category)
+admin.site.register(Product)
+
+B3: Vào command-line tại thư mục mysite:
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py createsuperuser
+- python manage.py runserver
+
+----------------------------------
+Error: When you add fields on models.py.
+- Run python manage.py makemigrations
+- show error: You are trying to add a non-nullable field 'category' to product without a default; we can't do that (the database needs something to populate existing rows).
+Tại field add new thêm null=True => category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Nhóm sản phẩm', null=True)

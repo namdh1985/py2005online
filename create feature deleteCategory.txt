@@ -1,0 +1,30 @@
+- Trong file app/views.py
+def deleteCategory(request, pk):
+	category = Category.objects.get(pk=pk)
+	category.delete()
+	return redirect('/')
+	
+- Trong file app/urls.py
+	path('delete_category/<pk>', deleteCategory),
+	
+- Trong file app/category/list.html
+B1: Tại nút 'Xóa' trong bảng code như sau:
+<table>
+....
+	<tbody>
+	.....
+		<td>
+		....
+			<a href="href="javascript:deleteCategory({{c.id}})" class="btn btn-sm bt-danger">Xóa</a>
+		...
+		</td>
+	</tbody>
+.....
+</table>
+<script>
+    function deleteCategory(id) {
+      if(confirm('Bạn có muốn xóa')) {
+        location.href = '/delete_category/' + id;
+      }
+    }
+ </script>

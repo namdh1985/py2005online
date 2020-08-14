@@ -1,0 +1,18 @@
+- Mục đích: Định nghĩa hàm updateCategory:
+
+B1: Trang chủ của categoryList có nút 'Chỉnh sửa' => link tới http://127.0.0.1:8000/update_category
+<a href="/update_category/{{c.id}}" class='btn btn-sm btn-secondary'>Chỉnh sửa</a>
+
+B2: Thêm hàm updateCategory trong file app/views.py
+def updateCategory(request, pk):
+	category = Category.objects.get(pk=pk)
+	form = CategoryForm(instance=category)
+	if request.method == 'POST':
+		form = CategoryForm(request.POST, instance=category)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+	return render(request, 'category/form.html', {'form': form})
+	
+B3: Thêm url trong file app/urls.py
+	path('update_category/<pk>', updateCategory),

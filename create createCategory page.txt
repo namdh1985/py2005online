@@ -1,0 +1,19 @@
+B1: Trong file app/urls.py
+- Add line into urlpatterns:
+	path('create_category', createCategory),
+# create_category sub đường dẫn ở link, createCategory là định nghĩa hàm
+	
+B2: Trong file app/templates/list.html
+- Tạo link tới http://127.0.0.1:8000/create_category
+	<a href="/create_category">Thêm nhóm sản phẩm</a>
+
+B3: Định nghĩa createCategory trong file app/views.py
+- Tạo ra 1 trang app/category/form.html để phục vụ thêm nhóm sản phẩm
+def createCategory(request):
+	form = CategoryForm()
+	if request.method == 'POST':
+		form = CategoryForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+	return render(request, 'category/form.html', {'form': form})

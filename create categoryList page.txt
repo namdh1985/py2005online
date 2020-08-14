@@ -1,0 +1,29 @@
+B1: Trong app/views.py
+- Định nghĩa index => category/list.html
+
+from .forms import *	# lấy forms của django từ file forms.py
+def index(request):
+	categoryList = Category.objects.all()	# hàm gọi Category trong forms
+	return render(request, 'category/list.html', {'categoryList': categoryList})
+	
+B2: Tạo file app/forms.py
+- Định nghĩa CategoryForm and ProductForm
+
+from .models import *
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+		
+B3: Test dữ liệu categoryList =>  file category/list.html
+
+<ul>
+    {%for c in categoryList%}
+        <li>{{c.name}}</li>
+    {%endfor%}
+</ul>

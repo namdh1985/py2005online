@@ -1,0 +1,105 @@
+- Ý tưởng: 
+
+  + Tạo thư mục static ngang với app và upload_file.
+  + Vào upload_file/settings.py thêm:
+STATICFILES_DIRS = [
+	os.path.join(BASE_DIR, 'static')
+
+------app/views.py----------
+from django.shortcuts import render, redirect
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage()
+productList = []
+
+def index(request):
+    return render(request, 'index.html', {'productList': productList})
+
+def createProduct(request):
+    if request.method == 'POST':
+        code = request.POST['code']
+        name = request.POST['name']
+        price = request.POST['price']
+        file = request.FILES.get('img')
+        if file and file.name != '':
+            saved_path = fs.save('static/'+ file.name, file)
+            img_path = '/' + saved_path
+        else:
+            img_path = None
+
+        productList.append({'code': code, 'name': name, 'price': price, 'img_path': img_path})
+        #print(productList)
+        return redirect('/')
+    return render(request, 'form.html')
+	
+------app/urls.py----------
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('', index),
+    path('create_product', createProduct, name='create-product'),
+]
+
+------app/templates/index.html------
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<div class="container pt-3">
+    <table class="table table-bordered">
+        <thead>
+            <tr class="text-center">
+                <th style="width:5%">#</th>
+                <th style="width:15%">Mã</th>
+                <th style="width:20%">Tên</th>
+                <th style="width:20%">Giá</th>
+                <th style="width:30%">Ảnh</th>
+                <th style="width:10%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productList %}
+                <tr class="text-center">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ p.code }}</td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.price }}</td>
+                    <td> <img src='{{p.img_path}}' style="max-height: 200px;"></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            {% if not productList %}
+                <tr>
+                    <td colspan="6">Không có dữ liệu</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <a class="btn btn-primary" href="{% url 'create-product' %}">Thêm mới sản phẩm</a>
+</div>
+
+------app/templates/form.html------
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<div class="container pt-3">
+    <h3>Thêm mới sản phẩm</h3>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="table">
+            <tr>
+                <td>Mã: </td>
+                <td><input class='form-control' name='code'> </td>
+            </tr>
+            <tr>
+                <td>Tên: </td>
+                <td><input class='form-control' name='name'> </td>
+            </tr>
+            <tr>
+                <td>Giá: </td>
+                <td><input class='form-control' name='price'> </td>
+            </tr>
+            <tr>
+                <td>Ảnh: </td>
+                <td><input class='form-control-file' type='file' name="img"></td>
+            </tr>
+        </table>
+        <button class="btn btn-primary" type="submit">Lưu lại</button>
+        <a href="/" class="btn btn-secondary">Quay lại</a>
+    </form>    
+</div>

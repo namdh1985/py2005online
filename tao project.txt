@@ -1,0 +1,28 @@
+1. cd vào thư mục Home project => cmd 
+2. Tạo project:
+D:\Python\05082020>django-admin startproject render_template
+3. cd render_template để startapp
+D:\Python\05082020\render_template>python manage.py startapp app
+4. Vào visual studio code tạo môi trường cho django
+open folder D:\Python\05082020\render_template
+- Sửa file \render_template\setting.py
+INSTALLED_APPS = [
+	'app',
+- Sửa file \render_template\urls.py
+from django.urls import include
+urlpatterns = [
+	....
+	path('', include('app.urls'))
+]
+- Tạo file \app\urls.py
+from django.urls import path
+from .views import *
+urlpatterns = [
+	path('', index)
+]
+- Sửa file \app\views.py
+def index(request):
+	return render(request, 'index.html')
+- Tạo file \app\index.html
+Home Page
+

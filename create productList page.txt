@@ -1,0 +1,18 @@
+B1: Trong app/views.py
+- Định nghĩa listProduct => product/list.html
+
+from .forms import *	# lấy forms của django từ file forms.py
+def listProduct(request):
+    productList = Product.objects.all()
+    return render(request, 'product/list.html', {'productList': productList})
+	
+B2: add line on file app/urls.py 
+	path('list_product', listProduct),
+		
+B3: Test dữ liệu productList =>  write file product/list.html
+
+<ul>
+    {%for c in productList%}
+        <li>{{p.name}}</li>
+    {%endfor%}
+</ul>

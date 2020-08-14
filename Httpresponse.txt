@@ -1,0 +1,9 @@
+Trong file firstapp\views.py => không tạo python manage.py startapp app.
+
+from django.shortcuts import HttpResponse
+
+Hàm HttpResponse => 
+tạo ra trang http, nhận request từ client gửi lên và trả response về client
+
+def index(request):
+	return HttpResponse('Hello Django') => hiển thị text ra trang chủ

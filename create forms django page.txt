@@ -1,0 +1,19 @@
+- Mục đích tạo trang form.html cho create hoặc update gọi vào khung của form
+B1: Trong file app/templates/form.html
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<div class="container pt-3">
+  <h3>Thông tin nhóm sản phẩm</h3>
+  <form method="POST" novalidate>
+    {%csrf_token%}
+    <table class="table table-form">{{form}}</table>
+    <button type="submit" class="btn btn-primary">Lưu lại</button>
+    <a class="btn btn-secondary" href="/">Quay lại</a>
+  </form>
+</div>
+# Chỉnh sửa bằng jquery cho các input đẹp hơn
+<script>
+  $(document).ready(function() {
+    $('.table-form input').addClass('form-control');
+  });
+</script>

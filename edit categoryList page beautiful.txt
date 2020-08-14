@@ -1,0 +1,39 @@
+- Chỉnh sửa giao diện trang chủ categoryList:
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<div class="container pt-3">
+  <table class="table table-bordered">
+    <thead>
+      <tr class="text-center">
+        <th style="width:5%">#</th>
+        <th style="width:40%">Mã</th>
+        <th style="width:40%">Tên</th>
+        <th style="width:15%"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for c in categoryList%}
+        <tr class="text-center">
+          <td>{{forloop.counter}}</td>
+          <td>{{c.code}}</td>
+          <td>{{c.name}}</td>
+          <td>
+            <a class="btn btn-sm btn-secondary" href="/update_category/{{c.id}}">Chỉnh sửa</a>
+            <a class="btn btn-sm btn-danger" href="javascript:deleteCategory({{c.id}})">Xóa</a>
+          </td>
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+  <a class="btn btn-primary" href="/create_category">Thêm nhóm sản phẩm</a>
+</div>
+
+
+
+<script>
+  function deleteCategory(id) {
+    if(confirm('Bạn có muốn xóa')) {
+      location.href = '/delete_category/' + id;
+    }
+  }
+</script>
